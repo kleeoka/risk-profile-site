@@ -1,18 +1,20 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
-type Point = { year: number; balance: number };
+interface SimulationChartProps {
+  data: { year: number; value: number }[];
+}
 
-export default function SimulationChart({ data }: { data: Point[] }) {
+export default function SimulationChart({ data }: SimulationChartProps) {
   return (
-    <div style={{ width: '100%', height: 300 }}>
+    <div className="w-full h-80 bg-white rounded-2xl p-4 shadow">
       <ResponsiveContainer>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="year" />
-          <YAxis />
-          <Tooltip formatter={(value: number) => `$${value.toLocaleString()}`} />
-          <Line type="monotone" dataKey="balance" stroke="#3182ce" strokeWidth={2} dot={false} />
+          <YAxis tickFormatter={(val) => `$${val}`} />
+          <Tooltip formatter={(value: number): string => `$${value.toFixed(2)}`} /> 
+          {/* ✅ Fixed: explicitly typed return */}
+          <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
