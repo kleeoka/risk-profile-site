@@ -1,7 +1,13 @@
+// components/SimulationChart.tsx
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
+interface SimulationData {
+  year: number;
+  value: number;
+}
+
 interface SimulationChartProps {
-  data: { year: number; value: number }[];
+  data: SimulationData[];
 }
 
 export default function SimulationChart({ data }: SimulationChartProps) {
@@ -12,8 +18,10 @@ export default function SimulationChart({ data }: SimulationChartProps) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="year" />
           <YAxis tickFormatter={(val) => `$${val}`} />
-          <Tooltip formatter={(value: number): string => `$${value.toFixed(2)}`} /> 
-          {/* ✅ Fixed: explicitly typed return */}
+          <Tooltip
+            formatter={(value: number) => [value, `$${value.toFixed(2)}`]} 
+            // ✅ Returns [number, string] tuple to satisfy Recharts Formatter type
+          />
           <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
